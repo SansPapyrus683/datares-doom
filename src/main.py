@@ -1,27 +1,34 @@
-import random
+import gymnasium as gym
+from stable_baselines3 import PPO
+from stable_baselines3.common.env_util import make_vec_env
 
-import vizdoom
+import vizdoom.gymnasium_wrapper  # just need the register commands
+from obs_wrapper import ObservationWrapper
 
-# Instantiate a VizDoom game instance.
-game = vizdoom.DoomGame()
-game.load_config('scenarios/basic.cfg')
-game.init()
+# Training parameters
+TRAINING_TIMESTEPS = int(1e6)
+N_STEPS = 128
+N_ENVS = 8
 
-# Define possible actions. Each number represents the state of a button (1=active).
-sample_actions = [
-    [1, 0, 0],  # Move left
-    [0, 1, 0],  # Move right
-    [0, 0, 1],  # Attack
-]
 
-n_episodes = 10
-current_episode = 0
+def wrap_env(env):
+    """
+    Create multiple environments: this speeds up training with PPO
+    We apply two wrappers on the environment:
+    1) The above wrapper that modifies the observations (takes only the image and resizes it)
+    2) A reward scaling wrapper. Normally the scenarios use large magnitudes for rewards (e.g., 100, -100).
+    This may lead to unstable learning, and we scale the rewards by 1/100
+    """
+    env = ObservationWrapper(env)
+    env = gym.wrappers.TransformReward(env, lambda r: r * 0.01)
+    return env
 
-while current_episode < n_episodes:
-    game.make_action(random.choice(sample_actions))
 
-    if game.is_episode_finished():
-        current_episode += 1
-        game.new_episode()
+envs = make_vec_env("VizdoomBasic-v0", n_envs=N_ENVS, wrapper_class=wrap_env)
 
-game.close()
+agent = PPO("CnnPolicy", envs, n_steps=N_STEPS, verbose=1)
+
+# Do the actual learning
+# This will print out the results in the console.
+# If agent gets better, "ep_rew_mean" should increase steadily
+agent.learn(total_timesteps=TRAINING_TIMESTEPS)

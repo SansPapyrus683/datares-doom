@@ -2,3 +2,5 @@ stable-baselines3~=2.1
 vizdoom~=1.2
 gym~=0.26
 tensorboard~=2.15
+opencv-python~=4.8.1
+shimmy~=1.3.0
