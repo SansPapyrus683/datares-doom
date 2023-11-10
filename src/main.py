@@ -1,14 +1,9 @@
 import gymnasium as gym
-from stable_baselines3 import PPO
+from stable_baselines3.ppo import PPO, policies
 from stable_baselines3.common.env_util import make_vec_env
 
 import vizdoom.gymnasium_wrapper  # just need the register commands
 from obs_wrapper import ObservationWrapper
-
-# Training parameters
-TRAINING_TIMESTEPS = int(1e6)
-N_STEPS = 128
-N_ENVS = 8
 
 
 def wrap_env(env):
@@ -24,9 +19,19 @@ def wrap_env(env):
     return env
 
 
+# Training parameters
+TRAINING_TIMESTEPS = 10 ** 6
+N_STEPS = 128
+N_ENVS = 8
+
 envs = make_vec_env("VizdoomBasic-v0", n_envs=N_ENVS, wrapper_class=wrap_env)
 
-agent = PPO("CnnPolicy", envs, n_steps=N_STEPS, verbose=1)
+agent = PPO(
+    policies.CnnPolicy,
+    envs,
+    n_steps=N_STEPS,
+    verbose=1
+)
 
 # Do the actual learning
 # This will print out the results in the console.
