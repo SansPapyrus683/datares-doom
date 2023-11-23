@@ -1,3 +1,4 @@
+torch
 vizdoom~=1.2
 tensorboard~=2.15
 opencv-python~=4.8.1
