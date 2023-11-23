@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-
-# E. Culurciello, L. Mueller, Z. Boztoprak
-# December 2020
-
 import itertools as it
 import os
 import random
@@ -17,7 +12,6 @@ import torch.optim as optim
 from tqdm import trange
 
 import vizdoom as vzd
-
 
 # Q-learning settings
 learning_rate = 0.00025
