@@ -31,8 +31,8 @@ episodes_to_watch = 10
 
 model_savefile = "./models/model-doom.pth"
 save_model = True
-load_model = False
-skip_learning = False
+load_model = True
+skip_learning = True
 
 # Configuration file path
 config_file_path = os.path.join(vzd.scenarios_path, "simpler_basic.cfg")
