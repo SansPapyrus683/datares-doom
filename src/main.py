@@ -29,15 +29,14 @@ frame_repeat = 12
 resolution = (30, 45)
 episodes_to_watch = 10
 
-model_savefile = "./models/model-doom.pth"
-save_model = True
-load_model = True
-skip_learning = True
-
 # Configuration file path
-config_file_path = os.path.join(vzd.scenarios_path, "simpler_basic.cfg")
-# config_file_path = os.path.join(vzd.scenarios_path, "rocket_basic.cfg")
-# config_file_path = os.path.join(vzd.scenarios_path, "basic.cfg")
+config = "rocket_basic"  # there's basic, rocket_basic, and simpler_basic
+config_file_path = os.path.join(vzd.scenarios_path, f"{config}.cfg")
+
+model_savefile = f"./models/{config}.pth"
+save_model = True
+load_model = False
+skip_learning = False
 
 
 def preprocess(img):
@@ -147,7 +146,7 @@ if __name__ == "__main__":
     # Initialize game and actions
     game = create_simple_game()
     n = game.get_available_buttons_size()
-    actions = [list(a) for a in it.product([0, 1], repeat=n)]
+    actions = list(it.product([0, 1], repeat=n))
 
     # Initialize our agent with the set parameters
     agent = DQNAgent(
