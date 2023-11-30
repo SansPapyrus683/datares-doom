@@ -47,7 +47,7 @@ class DuelQNet(nn.Module):
         x = x.view(-1, 192)
         x1 = x[:, :96]  # input for the net to calculate the state value
         x2 = x[:, 96:]  # relative advantage of actions in the state
-        state_value = self.state_fc(x1).reshape(-1, 1)
+        state_value = self.state_fc(x1)
         advantage_values = self.advantage_fc(x2)
         x = state_value + (
                 advantage_values - advantage_values.mean(dim=1).reshape(-1, 1)
