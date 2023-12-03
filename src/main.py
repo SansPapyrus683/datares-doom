@@ -30,20 +30,29 @@ resolution = (30, 45)
 episodes_to_watch = 10
 
 # Configuration file path
-config = "rocket_basic"  # there's basic, rocket_basic, and simpler_basic
+config = "defend_the_center"  # there's basic, rocket_basic, and simpler_basic
 config_file_path = os.path.join(vzd.scenarios_path, f"{config}.cfg")
 
 model_savefile = f"./models/{config}.pth"
 save_model = True
-load_model = False
+load_model = True
 skip_learning = False
 
 
 def preprocess(img):
     """Down samples image to resolution"""
+    channels = len(img.shape) == 3
+    if channels:
+        img = np.moveaxis(img, 0, 2)
+
     img = skimage.transform.resize(img, resolution)
     img = img.astype(np.float32)
-    img = np.expand_dims(img, axis=0)
+
+    if channels:
+        img = np.moveaxis(img, 2, 0)
+    else:
+        img = np.expand_dims(img, axis=0)
+
     return img
 
 
@@ -53,7 +62,7 @@ def create_simple_game():
     game.load_config(config_file_path)
     game.set_window_visible(False)
     game.set_mode(vzd.Mode.PLAYER)
-    game.set_screen_format(vzd.ScreenFormat.GRAY8)
+    game.set_screen_format(vzd.ScreenFormat.CRCGCB)
     game.set_screen_resolution(vzd.ScreenResolution.RES_640X480)
     game.init()
     print("Doom initialized.")
@@ -108,7 +117,7 @@ def run(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch=2000):
             if not done:
                 next_state = preprocess(game.get_state().screen_buffer)
             else:
-                next_state = np.zeros((1, 30, 45)).astype(np.float32)
+                next_state = np.zeros((3, *resolution)).astype(np.float32)
 
             agent.append_memory(state, action, reward, next_state, done)
 
