@@ -35,7 +35,7 @@ config_file_path = os.path.join(vzd.scenarios_path, f"{config}.cfg")
 
 model_savefile = f"./models/{config}.pth"
 save_model = True
-load_model = True
+load_model = False
 skip_learning = False
 
 
