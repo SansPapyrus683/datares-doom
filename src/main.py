@@ -15,7 +15,7 @@ from agent import DQNAgent
 # Q-learning settings
 learning_rate = 0.00025
 discount_factor = 0.99
-train_epochs = 10
+train_epochs = 20
 learning_steps_per_epoch = 2000
 replay_memory_size = 4000
 
