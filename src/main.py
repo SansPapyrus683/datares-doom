@@ -1,5 +1,6 @@
 import itertools as it
 import os
+import sys
 from time import sleep, time
 
 import numpy as np
@@ -14,9 +15,9 @@ from agent import DQNAgent
 # Q-learning settings
 learning_rate = 0.00025
 discount_factor = 0.99
-train_epochs = 5
+train_epochs = 10
 learning_steps_per_epoch = 2000
-replay_memory_size = 10000
+replay_memory_size = 4000
 
 # NN learning settings
 batch_size = 64
@@ -141,11 +142,12 @@ def run(game, agent, actions, num_epochs, frame_repeat, steps_per_epoch=2000):
             "max: %.1f," % train_scores.max(),
             )
 
-        test(game, agent)
         if save_model:
             print("Saving the network weights to:", model_savefile)
             torch.save(agent.q_net, model_savefile)
-        print("Total elapsed time: %.2f minutes" % ((time() - start_time) / 60.0))
+
+        test(game, agent)
+        print(f"Total elapsed time: {((time() - start_time) / 60.0):.2f} minutes")
 
     game.close()
     return agent, game
