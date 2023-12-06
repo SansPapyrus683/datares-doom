@@ -31,7 +31,7 @@ resolution = (30, 45)
 episodes_to_watch = 10
 
 # Configuration file path
-config = "defend_the_center"  # there's basic, rocket_basic, and simpler_basic
+config = "defend_the_center"  # https://vizdoom.farama.org/environments/default/
 config_file_path = os.path.join(vzd.scenarios_path, f"{config}.cfg")
 
 model_savefile = f"./models/{config}.pth"
@@ -44,7 +44,7 @@ def preprocess(img):
     """Down samples image to resolution"""
     channels = len(img.shape) == 3
     if channels:
-        img = np.moveaxis(img, 0, 2)
+        img = np.moveaxis   (img, 0, 2)
 
     img = skimage.transform.resize(img, resolution)
     img = img.astype(np.float32)
@@ -157,7 +157,10 @@ if __name__ == "__main__":
     # Initialize game and actions
     game = create_simple_game()
     n = game.get_available_buttons_size()
-    actions = list(it.product([0, 1], repeat=n))
+    actions = [[0] * n for _ in range(n + 1)]
+    for i in range(n):
+        actions[i + 1][i] = 1
+    # actions = list(it.product([0, 1], repeat=n))
 
     # Initialize our agent with the set parameters
     agent = DQNAgent(
