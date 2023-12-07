@@ -15,7 +15,7 @@ from agent import DQNAgent
 # Q-learning settings
 learning_rate = 0.00025
 discount_factor = 0.99
-train_epochs = 20
+train_epochs = 30
 learning_steps_per_epoch = 2000
 replay_memory_size = 4000
 
@@ -31,7 +31,7 @@ resolution = (30, 45)
 episodes_to_watch = 10
 
 # Configuration file path
-config = "defend_the_center"  # https://vizdoom.farama.org/environments/default/
+config = "defend_the_line"  # https://vizdoom.farama.org/environments/default/
 config_file_path = os.path.join(vzd.scenarios_path, f"{config}.cfg")
 
 model_savefile = f"./models/{config}.pth"
@@ -44,7 +44,7 @@ def preprocess(img):
     """Down samples image to resolution"""
     channels = len(img.shape) == 3
     if channels:
-        img = np.moveaxis   (img, 0, 2)
+        img = np.moveaxis(img, 0, 2)
 
     img = skimage.transform.resize(img, resolution)
     img = img.astype(np.float32)
