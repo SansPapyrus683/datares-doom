@@ -1,6 +1,4 @@
-import itertools as it
 import os
-import sys
 from time import sleep, time
 
 import numpy as np
@@ -36,8 +34,8 @@ config_file_path = os.path.join(vzd.scenarios_path, f"{config}.cfg")
 
 model_savefile = f"./models/{config}.pth"
 save_model = True
-load_model = False
-skip_learning = False
+load_model = True
+skip_learning = True
 
 
 def preprocess(img):
@@ -160,7 +158,7 @@ if __name__ == "__main__":
     actions = [[0] * n for _ in range(n + 1)]
     for i in range(n):
         actions[i + 1][i] = 1
-    # actions = list(it.product([0, 1], repeat=n))
+    # actions = list(it.product([0, 1], repeat=n))  # it was itertools
 
     # Initialize our agent with the set parameters
     agent = DQNAgent(
