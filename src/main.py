@@ -29,13 +29,13 @@ resolution = (30, 45)
 episodes_to_watch = 10
 
 # Configuration file path
-config = "defend_the_line"  # https://vizdoom.farama.org/environments/default/
+config = "basic"  # https://vizdoom.farama.org/environments/default/
 config_file_path = os.path.join(vzd.scenarios_path, f"{config}.cfg")
 
 model_savefile = f"./models/{config}.pth"
 save_model = True
-load_model = True
-skip_learning = True
+load_model = False
+skip_learning = False
 
 
 def preprocess(img):
